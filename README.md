@@ -1,130 +1,68 @@
-# Eye Gaze HUD — Precision Pupil & Iris Tracker (Web & Desktop)
+# Eye Gaze HUD
 
-[![Live Web App](https://img.shields.io/badge/Live%20Web%20App-eye.hamzafpv.com.tr-22d3ee?style=for-the-badge)](https://eye.hamzafpv.com.tr)
-[![Desktop Releases](https://img.shields.io/github/v/release/0dayfpv/eye-gaze-hud?label=Desktop%20Download&style=for-the-badge&color=f472b6)](https://github.com/0dayfpv/eye-gaze-hud/releases)
-[![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
-[![MediaPipe](https://img.shields.io/badge/MediaPipe-Face%20%26%20Iris%20478-0097a7?style=flat-square)](https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker)
+[![Live Web App](https://img.shields.io/badge/Try%20in%20Browser-eye.hamzafpv.com.tr-22d3ee?style=for-the-badge)](https://eye.hamzafpv.com.tr)
+[![Download](https://img.shields.io/github/v/release/0dayfpv/eye-gaze-hud?label=Download%20Desktop%20App&style=for-the-badge&color=f472b6)](https://github.com/0dayfpv/eye-gaze-hud/releases/latest)
 
-Real-time **eye gaze, pupil, and iris tracking HUD** available both as an instant **Web App** ([eye.hamzafpv.com.tr](https://eye.hamzafpv.com.tr)) and as a **Native High-FPS Desktop Application** (Windows & Linux) with **1:1 identical UI** and ultra-low native GPU/CPU inference latency (`~2.3 ms` on RTX 5050).
+Real-time **eye gaze, pupil, and iris tracking HUD** — runs directly in your browser or as a fast native desktop app for Windows & Linux. All camera processing stays 100% private on your device.
 
----
+## How to install and run?
 
-## Desktop App Download (Windows & Linux)
+### 1. Download the Desktop App (easiest — no coding needed)
 
-Want zero browser latency, full camera FPS, and offline one-click launch? Download the desktop app from the [**Releases**](https://github.com/0dayfpv/eye-gaze-hud/releases) page:
+Go to the [**Releases**](https://github.com/0dayfpv/eye-gaze-hud/releases/latest) page and download the file for your computer:
 
-| Platform | Package | How to Run |
-| --- | --- | --- |
-| **Windows (Installer)** | `Eye-Gaze-HUD-2.1.0-Windows-x64-Setup.exe` | Double-click to install with Desktop & Start Menu shortcuts |
-| **Windows (Portable)** | `Eye-Gaze-HUD-2.1.0-Windows-x64-Portable.exe` | Double-click to run directly with no installation |
-| **Linux (Universal)** | `Eye-Gaze-HUD-2.1.0-Linux-x86_64.AppImage` | Mark executable (`chmod +x`) and double-click on any Linux distro |
-| **Linux (Ubuntu / Debian)** | `Eye-Gaze-HUD-2.1.0-Linux-amd64.deb` | Install with `sudo apt install ./Eye-Gaze-HUD-2.1.0-Linux-amd64.deb` |
+- **Windows:** Download `Eye-Gaze-HUD-2.1.0-Windows-x64-Setup.exe` (or `Portable.exe`) and double-click it.
+- **Linux:** Download `Eye-Gaze-HUD-2.1.0-Linux-x86_64.AppImage` (or `.deb`) and run it.
+
+That's all it takes — no Python, no Node.js, and no terminal required. You can also try the web version right away at [**eye.hamzafpv.com.tr**](https://eye.hamzafpv.com.tr).
 
 ---
 
-## Key Features (Web & Desktop 1:1 Parity)
+### 2. Run the Web App locally using git
 
-- **Dedicated High-FPS Eye & Iris Engine:** Uses MediaPipe `FaceLandmarker` (478 face + 10 iris landmarks `468..477` + neural `eyeLook*` / `eyeBlink*` blendshapes) with automatic `GPU → CPU` delegate fallback.
-- **Hybrid Geometric + Neural Gaze Fusion:** Combines rotation-invariant iris-in-socket projection (`hx`, `hy`) with MediaPipe neural eye-look blendshapes and head-pose (`Yaw / Pitch / Roll`) compensation.
-- **Interactive 5-Point Affine Calibration:** Click or press `SPACE` while looking at 5 on-screen targets (`Center`, `Top-Left`, `Top-Right`, `Bottom-Right`, `Bottom-Left`) to fit an ordinary least squares (OLS) affine calibration model tailored to your camera and seating position (`ESC` cancels).
-- **9-Zone Gaze Classification & Live Radar:** Classifies gaze into `UP-LEFT`, `UP`, `UP-RIGHT`, `LEFT`, `CENTER`, `RIGHT`, `DOWN-LEFT`, `DOWN`, and `DOWN-RIGHT` with a live 2D radar pad in the sidebar.
-- **Blink Detection & Blink-Freeze:** Counts blinks automatically and freezes gaze coordinates during eyelid closure to prevent downward cursor jumps.
-- **Rich Cybernetic HUD Visualizations:**
-  - **3D Pupil Gaze Rays & Target Reticle**
-  - **3×3 Gaze Zone Grid** with active sector highlighting
-  - **12×9 Thermal Gaze Heatmap** & **28-Point Saccade Trail**
-  - **Dual-Eye Ocular Scope HUD** showing magnified left/right iris lock and eye openness `%`
-  - **Overlay & Blackout Tactical Grid Modes** + **Mirror Mode** + **Face Mesh**
-  - **One-Euro Adaptive Smoothing Filter**
-- **JSON Telemetry Export:** Export live gaze coordinates, iris ratios, blink count, calibration matrix, and saccade trail as a structured `.json` snapshot.
+Requires [Git](https://git-scm.com/downloads) and [Node.js 20+](https://nodejs.org/).
+
+- `git clone https://github.com/0dayfpv/eye-gaze-hud.git`
+- `cd eye-gaze-hud`
+- `npm install`
+- `npm run dev`
+
+Then open `http://localhost:5173` in your browser.
 
 ---
 
-## Repository Structure
+### 3. Run the Desktop App from source
 
-```text
-.
-├── src/                      # Web App (deployed to https://eye.hamzafpv.com.tr via Vercel)
-│   ├── engine/               # Browser MediaPipe FaceLandmarker + Gaze math
-│   ├── components/           # EyeCanvas & EyeControlPanel
-│   └── App.tsx
-└── desktop/                  # Native Desktop App (Electron + Python MediaPipe GPU/CPU sidecar)
-    ├── backend/              # Native V4L2/DirectShow capture + MediaPipe C++ WebSocket server
-    ├── electron/             # Electron shell & clean sidecar lifecycle
-    ├── src/                  # 1:1 Web UI connected to native WebSocket stream
-    └── scripts/              # Benchmark & GitHub Actions Windows/Linux release workflow
-```
+Requires [Git](https://git-scm.com/downloads), [Node.js 20+](https://nodejs.org/), and [Python 3.11](https://www.python.org/downloads/).
 
----
+**Linux / macOS:**
 
-## Local Installation & Development
+- `git clone https://github.com/0dayfpv/eye-gaze-hud.git`
+- `cd eye-gaze-hud/desktop`
+- `python3.11 -m venv backend/.venv`
+- `backend/.venv/bin/pip install mediapipe==1.2.3 opencv-contrib-python numpy websockets pillow`
+- `npm install`
+- `npm run build`
+- `npm start`
 
-> **Just want to use the app without installing any developer tools?** Download the ready-to-run installer from the [**Releases**](https://github.com/0dayfpv/eye-gaze-hud/releases) page or open the live web version at [eye.hamzafpv.com.tr](https://eye.hamzafpv.com.tr).
+**Windows (PowerShell):**
 
-### Dependencies
-
-| Target | Required Software | Notes |
-| --- | --- | --- |
-| **Web App** | [Git](https://git-scm.com/downloads), [Node.js 20+](https://nodejs.org/) (includes `npm`) | No Python required — runs 100% in the browser |
-| **Desktop App (from source)** | All of the above + [Python 3.11](https://www.python.org/downloads/) | Needed for the native MediaPipe GPU/CPU backend (`mediapipe`, `opencv-contrib-python`, `numpy`, `websockets`, `pillow`) |
+- `git clone https://github.com/0dayfpv/eye-gaze-hud.git`
+- `cd eye-gaze-hud\desktop`
+- `py -3.11 -m venv backend\.venv`
+- `.\backend\.venv\Scripts\pip install mediapipe==1.2.3 opencv-contrib-python numpy websockets pillow`
+- `npm install`
+- `npm run build`
+- `npm start`
 
 ---
 
-### Option A — Run the Web App Locally
+## What's inside?
 
-Clone the repository, install dependencies, and start the dev server:
-
-```bash
-git clone https://github.com/0dayfpv/eye-gaze-hud.git
-cd eye-gaze-hud
-npm install
-npm run dev
-```
-
-- `npm install` automatically copies the self-hosted MediaPipe WASM files into `public/wasm/`.
-- Open **`http://localhost:5173`** in your browser and allow webcam access.
-
----
-
-### Option B — Run the Native Desktop App from Source (`desktop/`)
-
-First clone the repository (if you haven't already):
-
-```bash
-git clone https://github.com/0dayfpv/eye-gaze-hud.git
-cd eye-gaze-hud/desktop
-```
-
-#### Linux / macOS
-```bash
-# 1. Create a Python 3.11 virtual environment and install backend dependencies
-python3.11 -m venv backend/.venv
-backend/.venv/bin/pip install mediapipe==1.2.3 opencv-contrib-python numpy websockets pillow
-
-# 2. Install Node/Electron dependencies, build the UI, and launch
-npm install
-npm run build
-npm start
-```
-
-#### Windows (PowerShell)
-```powershell
-# 1. Create a Python 3.11 virtual environment and install backend dependencies
-py -3.11 -m venv backend\.venv
-.\backend\.venv\Scripts\pip install mediapipe==1.2.3 opencv-contrib-python numpy websockets pillow
-
-# 2. Install Node/Electron dependencies, build the UI, and launch
-npm install
-npm run build
-npm start
-```
-
----
-
-## Privacy
-
-All video frames are processed **100% locally on your device** (WebGL/WASM in the Web App, native GPU/CPU in the Desktop App). No webcam video, images, or biometric gaze data are ever transmitted to any server.
+- **Precision Iris & Gaze Tracking:** MediaPipe Face & Iris Landmarker (`478` landmarks + neural eye blendshapes) with head-pose compensation.
+- **5-Point Calibration:** Look at 5 targets and click or press `SPACE` (`ESC` to cancel).
+- **Live HUD & Analytics:** 9-zone gaze direction, 2D radar, 3D gaze rays, heatmap, saccade trail, ocular scope magnifier, blink counter with blink-freeze, Overlay/Blackout modes, and JSON snapshot export.
+- **High-FPS Native Backend (`desktop/`):** Runs MediaPipe natively on GPU/CPU (`~2.3 ms` on RTX 5050) for zero browser lag.
 
 ---
 
