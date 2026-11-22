@@ -17,7 +17,6 @@ Want zero browser latency, full camera FPS, and offline one-click launch? Downlo
 | Platform | Package | How to Run |
 | --- | --- | --- |
 | **Windows (Installer)** | `Eye-Gaze-HUD-2.1.0-Windows-x64-Setup.exe` | Double-click to install with Desktop & Start Menu shortcuts |
-| **Windows (Portable)** | `Eye-Gaze-HUD-2.1.0-Windows-x64-Portable.exe` | Double-click to run directly with no installation |
 | **Linux (Universal)** | `Eye-Gaze-HUD-2.1.0-Linux-x86_64.AppImage` | Mark executable (`chmod +x`) and double-click on any Linux distro |
 | **Linux (Ubuntu / Debian)** | `Eye-Gaze-HUD-2.1.0-Linux-amd64.deb` | Install with `sudo apt install ./Eye-Gaze-HUD-2.1.0-Linux-amd64.deb` |
 
@@ -71,7 +70,7 @@ Want zero browser latency, full camera FPS, and offline one-click launch? Downlo
 
 ---
 
-### Run the Web App Locally
+### Option A — Run the Web App Locally
 
 Clone the repository, install dependencies, and start the dev server:
 
@@ -87,7 +86,14 @@ npm run dev
 
 ---
 
+### Option B — Run the Native Desktop App from Source (`desktop/`)
 
+First clone the repository (if you haven't already):
+
+```bash
+git clone https://github.com/0dayfpv/eye-gaze-hud.git
+cd eye-gaze-hud/desktop
+```
 
 #### Linux / macOS
 ```bash
