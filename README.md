@@ -63,14 +63,10 @@ Want zero browser latency, full camera FPS, and offline one-click launch? Downlo
 
 ### Dependencies
 
-| Target | Required Software | Notes |
-| --- | --- | --- |
-| **Web App** | [Git](https://git-scm.com/downloads), [Node.js 20+](https://nodejs.org/) (includes `npm`) | No Python required — runs 100% in the browser |
-| **Desktop App (from source)** | All of the above + [Python 3.11](https://www.python.org/downloads/) | Needed for the native MediaPipe GPU/CPU backend (`mediapipe`, `opencv-contrib-python`, `numpy`, `websockets`, `pillow`) |
+- [Git](https://git-scm.com/downloads)
+- [Node.js 20+](https://nodejs.org/) *(includes `npm`)*
 
----
-
-### Option A — Run the Web App Locally
+### Run the Web App Locally
 
 Clone the repository, install dependencies, and start the dev server:
 
@@ -83,41 +79,6 @@ npm run dev
 
 - `npm install` automatically copies the self-hosted MediaPipe WASM files into `public/wasm/`.
 - Open **`http://localhost:5173`** in your browser and allow webcam access.
-
----
-
-### Option B — Run the Native Desktop App from Source (`desktop/`)
-
-First clone the repository (if you haven't already):
-
-```bash
-git clone https://github.com/0dayfpv/eye-gaze-hud.git
-cd eye-gaze-hud/desktop
-```
-
-#### Linux / macOS
-```bash
-# 1. Create a Python 3.11 virtual environment and install backend dependencies
-python3.11 -m venv backend/.venv
-backend/.venv/bin/pip install mediapipe==1.2.3 opencv-contrib-python numpy websockets pillow
-
-# 2. Install Node/Electron dependencies, build the UI, and launch
-npm install
-npm run build
-npm start
-```
-
-#### Windows (PowerShell)
-```powershell
-# 1. Create a Python 3.11 virtual environment and install backend dependencies
-py -3.11 -m venv backend\.venv
-.\backend\.venv\Scripts\pip install mediapipe==1.2.3 opencv-contrib-python numpy websockets pillow
-
-# 2. Install Node/Electron dependencies, build the UI, and launch
-npm install
-npm run build
-npm start
-```
 
 ---
 
