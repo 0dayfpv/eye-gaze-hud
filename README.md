@@ -58,49 +58,63 @@ Want zero browser latency, full camera FPS, and offline one-click launch? Downlo
 
 ---
 
-## Local Development (Build from Source)
+## Local Installation & Development
 
-### Prerequisites
-- **Git** & **Node.js 20+**
-- **Python 3.11** *(only required if running the Desktop App from source)*
+> **Just want to use the app without installing any developer tools?** Download the ready-to-run installer from the [**Releases**](https://github.com/0dayfpv/eye-gaze-hud/releases) page or open the live web version at [eye.hamzafpv.com.tr](https://eye.hamzafpv.com.tr).
 
-### 1. Clone the Repository
+### Dependencies
+
+| Target | Required Software | Notes |
+| --- | --- | --- |
+| **Web App** | [Git](https://git-scm.com/downloads), [Node.js 20+](https://nodejs.org/) (includes `npm`) | No Python required — runs 100% in the browser |
+| **Desktop App (from source)** | All of the above + [Python 3.11](https://www.python.org/downloads/) | Needed for the native MediaPipe GPU/CPU backend (`mediapipe`, `opencv-contrib-python`, `numpy`, `websockets`, `pillow`) |
+
+---
+
+### Option A — Run the Web App Locally
+
+Clone the repository, install dependencies, and start the dev server:
+
 ```bash
 git clone https://github.com/0dayfpv/eye-gaze-hud.git
 cd eye-gaze-hud
-```
-
-### 2. Run the Web App (Root)
-```bash
 npm install
 npm run dev
 ```
 
-### 3. Run the Native Desktop App (`desktop/`)
+- `npm install` automatically copies the self-hosted MediaPipe WASM files into `public/wasm/`.
+- Open **`http://localhost:5173`** in your browser and allow webcam access.
 
-**Linux / macOS:**
+---
+
+### Option B — Run the Native Desktop App from Source (`desktop/`)
+
+First clone the repository (if you haven't already):
+
 ```bash
-cd desktop
+git clone https://github.com/0dayfpv/eye-gaze-hud.git
+cd eye-gaze-hud/desktop
+```
 
-# 1) Create Python 3.11 virtual environment for the native MediaPipe backend
+#### Linux / macOS
+```bash
+# 1. Create a Python 3.11 virtual environment and install backend dependencies
 python3.11 -m venv backend/.venv
 backend/.venv/bin/pip install mediapipe==1.2.3 opencv-contrib-python numpy websockets pillow
 
-# 2) Install frontend & Electron dependencies, build UI, and launch
+# 2. Install Node/Electron dependencies, build the UI, and launch
 npm install
 npm run build
 npm start
 ```
 
-**Windows (PowerShell):**
+#### Windows (PowerShell)
 ```powershell
-cd desktop
-
-# 1) Create Python 3.11 virtual environment for the native MediaPipe backend
+# 1. Create a Python 3.11 virtual environment and install backend dependencies
 py -3.11 -m venv backend\.venv
 .\backend\.venv\Scripts\pip install mediapipe==1.2.3 opencv-contrib-python numpy websockets pillow
 
-# 2) Install frontend & Electron dependencies, build UI, and launch
+# 2. Install Node/Electron dependencies, build the UI, and launch
 npm install
 npm run build
 npm start
