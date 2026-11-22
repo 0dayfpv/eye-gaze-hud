@@ -149,7 +149,7 @@ describe("<EyeCanvas />", () => {
         calibrationOverlay={{
           x: 0.5,
           y: 0.5,
-          label: "Merkez (Center)",
+          label: "Center",
           progress: 0,
           stepIndex: 0,
           totalSteps: 5,

@@ -1195,8 +1195,8 @@ export function EyeCanvas({
               </p>
               <p className="mt-0.5 text-[11px] text-slate-300">
                 {calibrationOverlay.capturing
-                  ? "Gözünüzü hedefte sabit tutun..."
-                  : "Hedefe bakın ve tıklayın (veya SPACE tuşuna basın)"}
+                  ? "Hold your gaze steady on the target..."
+                  : "Look at the target and click (or press SPACE)"}
               </p>
             </div>
 

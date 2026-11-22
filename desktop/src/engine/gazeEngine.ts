@@ -41,11 +41,11 @@ export const CALIBRATION_TARGETS: readonly {
   x: number;
   y: number;
 }[] = [
-  { id: "center", label: "Merkez (Center)", x: 0.5, y: 0.5 },
-  { id: "top-left", label: "Sol Üst (Top-Left)", x: 0.14, y: 0.16 },
-  { id: "top-right", label: "Sağ Üst (Top-Right)", x: 0.86, y: 0.16 },
-  { id: "bottom-right", label: "Sağ Alt (Bottom-Right)", x: 0.86, y: 0.84 },
-  { id: "bottom-left", label: "Sol Alt (Bottom-Left)", x: 0.14, y: 0.84 },
+  { id: "center", label: "Center", x: 0.5, y: 0.5 },
+  { id: "top-left", label: "Top-Left", x: 0.14, y: 0.16 },
+  { id: "top-right", label: "Top-Right", x: 0.86, y: 0.16 },
+  { id: "bottom-right", label: "Bottom-Right", x: 0.86, y: 0.84 },
+  { id: "bottom-left", label: "Bottom-Left", x: 0.14, y: 0.84 },
 ];
 
 function isFinitePt(p: Point3D | undefined | null): p is Point3D {

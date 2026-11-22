@@ -53,8 +53,7 @@
     },
     "win": {
       "target": [
-        "nsis",
-        "portable"
+        "nsis"
       ],
       "icon": "assets/icon.ico"
     },
@@ -64,9 +63,6 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "artifactName": "Eye-Gaze-HUD-${version}-Windows-${arch}-Setup.${ext}"
-    },
-    "portable": {
-      "artifactName": "Eye-Gaze-HUD-${version}-Windows-${arch}-Portable.${ext}"
     }
   },
   "dependencies": {
