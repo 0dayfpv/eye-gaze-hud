@@ -1,0 +1,17 @@
+node_modules/
+dist/
+dist-backend/
+build/
+release/
+*.spec
+backend/.venv/
+.build-venv/
+backend/__pycache__/
+backend/**/__pycache__/
+.pytest_cache/
+.agents/
+playwright-report/
+test-results/
+coverage/
+.DS_Store
+*.log

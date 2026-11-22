@@ -1,98 +1,84 @@
-# Eye Gaze HUD — Precision Pupil & Iris Tracker
+# Eye Gaze HUD — Precision Pupil & Iris Tracker (Web & Desktop)
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-eye.hamzafpv.com.tr-22d3ee?style=for-the-badge)](https://eye.hamzafpv.com.tr)
+[![Live Web App](https://img.shields.io/badge/Live%20Web%20App-eye.hamzafpv.com.tr-22d3ee?style=for-the-badge)](https://eye.hamzafpv.com.tr)
+[![Desktop Releases](https://img.shields.io/github/v/release/0dayfpv/eye-gaze-hud?label=Desktop%20Download&style=for-the-badge&color=f472b6)](https://github.com/0dayfpv/eye-gaze-hud/releases)
 [![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
 [![MediaPipe](https://img.shields.io/badge/MediaPipe-Face%20%26%20Iris%20478-0097a7?style=flat-square)](https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker)
-[![Vite](https://img.shields.io/badge/Vite-8-646cff?style=flat-square&logo=vite)](https://vite.dev)
 
-Real-time, client-side **eye gaze, pupil, and iris tracking HUD** running directly in the browser with WebGL/WASM acceleration — zero backend required, 100% private camera processing.
-
-> **Live App:** [https://eye.hamzafpv.com.tr](https://eye.hamzafpv.com.tr)
+Real-time **eye gaze, pupil, and iris tracking HUD** available both as an instant **Web App** ([eye.hamzafpv.com.tr](https://eye.hamzafpv.com.tr)) and as a **Native High-FPS Desktop Application** (Windows & Linux) with **1:1 identical UI** and ultra-low native GPU/CPU inference latency (`~2.3 ms` on RTX 5050).
 
 ---
 
-## Key Features
+## Desktop App Download (Windows & Linux)
 
-- **Dedicated High-FPS Eye & Iris Engine (`EyeEngine`):** Loads only MediaPipe `FaceLandmarker` (478 face + 10 iris landmarks `468..477` + neural `eyeLook*` / `eyeBlink*` blendshapes) with automatic `GPU → CPU` delegate fallback for maximum frame rate.
+Want zero browser latency, full camera FPS, and offline one-click launch? Download the desktop app from the [**Releases**](https://github.com/0dayfpv/eye-gaze-hud/releases) page:
+
+| Platform | Package | How to Run |
+| --- | --- | --- |
+| **Linux (Universal)** | `Eye-Gaze-HUD-2.1.0-Linux-x86_64.AppImage` | Mark executable (`chmod +x`) and double-click on any Linux distro |
+| **Linux (Ubuntu / Debian)** | `Eye-Gaze-HUD-2.1.0-Linux-amd64.deb` | Install with `sudo apt install ./Eye-Gaze-HUD-2.1.0-Linux-amd64.deb` |
+| **Windows (Installer)** | `Eye-Gaze-HUD-2.1.0-Windows-x64-nsis.exe` | Double-click to install with Desktop & Start Menu shortcuts *(via GitHub Actions release workflow)* |
+| **Windows (Portable)** | `Eye-Gaze-HUD-2.1.0-Windows-x64-portable.exe` | Double-click to run directly with no installation *(via GitHub Actions release workflow)* |
+
+---
+
+## Key Features (Web & Desktop 1:1 Parity)
+
+- **Dedicated High-FPS Eye & Iris Engine:** Uses MediaPipe `FaceLandmarker` (478 face + 10 iris landmarks `468..477` + neural `eyeLook*` / `eyeBlink*` blendshapes) with automatic `GPU → CPU` delegate fallback.
 - **Hybrid Geometric + Neural Gaze Fusion:** Combines rotation-invariant iris-in-socket projection (`hx`, `hy`) with MediaPipe neural eye-look blendshapes and head-pose (`Yaw / Pitch / Roll`) compensation.
-- **Interactive 5-Point Affine Calibration:** Click or press `SPACE` while looking at 5 on-screen targets (`Center`, `Top-Left`, `Top-Right`, `Bottom-Right`, `Bottom-Left`) to fit an ordinary least squares (OLS) affine calibration model tailored to your camera and seating position.
+- **Interactive 5-Point Affine Calibration:** Click or press `SPACE` while looking at 5 on-screen targets (`Center`, `Top-Left`, `Top-Right`, `Bottom-Right`, `Bottom-Left`) to fit an ordinary least squares (OLS) affine calibration model tailored to your camera and seating position (`ESC` cancels).
 - **9-Zone Gaze Classification & Live Radar:** Classifies gaze into `UP-LEFT`, `UP`, `UP-RIGHT`, `LEFT`, `CENTER`, `RIGHT`, `DOWN-LEFT`, `DOWN`, and `DOWN-RIGHT` with a live 2D radar pad in the sidebar.
-- **Blink Detection & Blink-Freeze:** Automatically counts blinks and freezes gaze coordinates during eyelid closure to prevent downward cursor jumps.
+- **Blink Detection & Blink-Freeze:** Counts blinks automatically and freezes gaze coordinates during eyelid closure to prevent downward cursor jumps.
 - **Rich Cybernetic HUD Visualizations:**
   - **3D Pupil Gaze Rays & Target Reticle**
   - **3×3 Gaze Zone Grid** with active sector highlighting
   - **12×9 Thermal Gaze Heatmap** & **28-Point Saccade Trail**
   - **Dual-Eye Ocular Scope HUD** showing magnified left/right iris lock and eye openness `%`
-  - **Overlay & Blackout Tactical Grid Modes** + **Mirror Mode**
+  - **Overlay & Blackout Tactical Grid Modes** + **Mirror Mode** + **Face Mesh**
   - **One-Euro Adaptive Smoothing Filter**
 - **JSON Telemetry Export:** Export live gaze coordinates, iris ratios, blink count, calibration matrix, and saccade trail as a structured `.json` snapshot.
 
 ---
 
-## Tech Stack
-
-| Layer | Technology |
-| --- | --- |
-| UI Framework | React 19 + TypeScript 5.8 |
-| Build Tool | Vite 8 + Tailwind CSS 4 |
-| Computer Vision | `@mediapipe/tasks-vision` (`FaceLandmarker` + Iris + Blendshapes, self-hosted WASM) |
-| Testing | Vitest 5 + Testing Library + Playwright |
-| Hosting | (`eye.hamzafpv.com.tr`) |
-
----
-
-## Project Structure
+## Repository Structure
 
 ```text
-src/
-├── engine/
-│   ├── eyeEngine.ts          # Dedicated MediaPipe FaceLandmarker + Blendshapes engine (GPU/CPU fallback)
-│   ├── gazeEngine.ts         # Iris geometry, blendshape fusion, 5-pt OLS affine calibration, One-Euro smoother, heatmap
-│   └── geometry.ts           # 3D math, head-pose metrics (Yaw/Pitch/Roll), landmark smoother
-├── components/
-│   ├── EyeCanvas.tsx         # HiDPI canvas renderer (iris lock, gaze rays, reticle, 3x3 grid, heatmap, ocular scope, calibration UI)
-│   └── EyeControlPanel.tsx   # Live 2D gaze radar, calibration controls, sensitivity sliders, layer toggles, ocular biometrics
-└── App.tsx                   # Camera lifecycle, synchronized rAF pipeline, HUD header, keyboard shortcuts (SPACE/ESC)
+.
+├── src/                      # Web App (deployed to https://eye.hamzafpv.com.tr via Vercel)
+│   ├── engine/               # Browser MediaPipe FaceLandmarker + Gaze math
+│   ├── components/           # EyeCanvas & EyeControlPanel
+│   └── App.tsx
+└── desktop/                  # Native Desktop App (Electron + Python MediaPipe GPU/CPU sidecar)
+    ├── backend/              # Native V4L2/DirectShow capture + MediaPipe C++ WebSocket server
+    ├── electron/             # Electron shell & clean sidecar lifecycle
+    ├── src/                  # 1:1 Web UI connected to native WebSocket stream
+    └── scripts/              # Benchmark & GitHub Actions Windows/Linux release workflow
 ```
 
 ---
 
-## Getting Started
+## Local Development
 
-### Prerequisites
-- Node.js 20+
-- A webcam-enabled browser (Chrome, Edge, Firefox, Safari)
-
-### Local Development
-
+### Web App (Root)
 ```bash
-# Install dependencies (automatically copies MediaPipe WASM files to public/wasm)
 npm install
-
-# Start development server
 npm run dev
 ```
 
-### Verification & Production Build
-
+### Desktop App (`desktop/`)
 ```bash
-# Run unit tests
-npm test
-
-# Lint & TypeScript check
-npm run lint
-npm run typecheck
-
-# Build for production
+cd desktop
+npm install
 npm run build
+npm start
 ```
 
 ---
 
 ## Privacy
 
-All video frames are processed **locally on your device** inside the browser via WebGL/WASM. No webcam video, images, or biometric gaze data are ever transmitted to any server.
+All video frames are processed **100% locally on your device** (WebGL/WASM in the Web App, native GPU/CPU in the Desktop App). No webcam video, images, or biometric gaze data are ever transmitted to any server.
 
 ---
 

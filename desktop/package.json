@@ -1,0 +1,101 @@
+{
+  "name": "eye-gaze-hud-desktop",
+  "private": true,
+  "version": "2.1.0",
+  "description": "Eye Gaze HUD V2.1 — Native High-FPS Pupil & Iris Tracker",
+  "author": "HamzaFPV <0dayfpv@users.noreply.github.com>",
+  "homepage": "https://eye.hamzafpv.com.tr",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "start": "electron .",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.node.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "dist:linux": "npm run build && electron-builder --linux --publish never",
+    "dist:win": "npm run build && electron-builder --win --publish never"
+  },
+  "build": {
+    "appId": "tr.com.hamzafpv.eyegazehud",
+    "productName": "Eye Gaze HUD",
+    "copyright": "Copyright © 2025-2026 hamzafpv.com.tr",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "dist-backend/eye-gaze-backend",
+        "to": "backend"
+      },
+      {
+        "from": "assets/icon.png",
+        "to": "assets/icon.png"
+      }
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "assets/icon.png",
+      "category": "Utility",
+      "artifactName": "Eye-Gaze-HUD-${version}-Linux-${arch}.${ext}"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "assets/icon.ico",
+      "artifactName": "Eye-Gaze-HUD-${version}-Windows-${arch}-${target}.${ext}"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
+  "dependencies": {
+    "lucide-react": "^1.77.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "1.65.1",
+    "@tailwindcss/vite": "^4.3.5",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^8.0.0",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.13",
+    "@types/node": "^22.12.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/ws": "^8.18.2",
+    "@vitejs/plugin-react": "^6.3.0",
+    "electron": "^45.4.1",
+    "eslint": "^10.15.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.8",
+    "globals": "^17.14.0",
+    "jsdom": "^31.0.1",
+    "tailwindcss": "^4.3.5",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.73.0",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1",
+    "wait-on": "^9.5.1",
+    "ws": "^8.23.0"
+  }
+}

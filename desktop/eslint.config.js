@@ -1,0 +1,59 @@
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
+import { defineConfig, globalIgnores } from 'eslint/config';
+
+export default defineConfig([
+  globalIgnores([
+    'dist',
+    'dist-electron',
+    'backend',
+    'assets',
+    '.agents',
+    'coverage',
+    'playwright-report',
+    'test-results',
+  ]),
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2022,
+      globals: globals.browser,
+    },
+    rules: {
+      'react-refresh/only-export-components': [
+        'error',
+        {
+          allowConstantExport: true,
+          allowCompoundComponents: true,
+          allowExportNames: ['drawEyeFrame'],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/**/*.test.{ts,tsx}'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
+  {
+    files: ['*.config.{ts,js,mjs}', 'e2e/**/*.ts', 'electron/**/*.ts', 'scripts/**/*.mjs'],
+    extends: [js.configs.recommended, tseslint.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 2022,
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
+    },
+  },
+]);

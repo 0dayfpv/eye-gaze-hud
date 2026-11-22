@@ -1,0 +1,120 @@
+name: Build & Release Desktop App (Windows + Linux)
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ${{ matrix.os_label }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: desktop
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            os_label: Linux
+            pyinstaller_sep: ":"
+            dist_cmd: npm run dist:linux
+          - os: windows-latest
+            os_label: Windows
+            pyinstaller_sep: ";"
+            dist_cmd: npm run dist:win
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python backend dependencies & PyInstaller
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          pip install mediapipe==1.2.3 opencv-contrib-python numpy websockets pillow pyinstaller
+
+      - name: Download MediaPipe FaceLandmarker model if missing
+        shell: bash
+        run: |
+          mkdir -p assets
+          if [ ! -f assets/face_landmarker.task ]; then
+            curl -sL -o assets/face_landmarker.task "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task"
+          fi
+
+      - name: Build native Python backend binary (PyInstaller)
+        shell: bash
+        run: |
+          pyinstaller \
+            --onedir \
+            --noconfirm \
+            --name eye-gaze-backend \
+            --distpath dist-backend \
+            --add-data "assets/face_landmarker.task${{ matrix.pyinstaller_sep }}assets" \
+            --collect-all mediapipe \
+            --collect-all cv2 \
+            --hidden-import websockets \
+            --hidden-import backend.server \
+            backend/entry.py
+
+      - name: Install Node dependencies & electron-builder
+        shell: bash
+        run: |
+          npm ci
+          npm install --no-save electron-builder
+
+      - name: Run desktop frontend tests & typecheck
+        shell: bash
+        run: |
+          npm test
+          npm run typecheck
+
+      - name: Package desktop installers (${{ matrix.os_label }})
+        shell: bash
+        run: ${{ matrix.dist_cmd }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Eye-Gaze-HUD-${{ matrix.os_label }}
+          path: |
+            desktop/release/*.exe
+            desktop/release/*.AppImage
+            desktop/release/*.deb
+          if-no-files-found: error
+
+  publish-release:
+    name: Publish GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Create / Update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Eye Gaze HUD ${{ github.ref_name }} (Windows & Linux)"
+          generate_release_notes: true
+          files: artifacts/*
