@@ -38,7 +38,7 @@ Real-time, client-side **eye gaze, pupil, and iris tracking HUD** running direct
 | Build Tool | Vite 8 + Tailwind CSS 4 |
 | Computer Vision | `@mediapipe/tasks-vision` (`FaceLandmarker` + Iris + Blendshapes, self-hosted WASM) |
 | Testing | Vitest 5 + Testing Library + Playwright |
-| Hosting | Vercel (`eye.hamzafpv.com.tr`) |
+| Hosting | (`eye.hamzafpv.com.tr`) |
 
 ---
 
